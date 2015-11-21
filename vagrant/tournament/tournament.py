@@ -8,19 +8,39 @@ import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+    return psycopg2.connect("dbname=tournament user=vagrant")
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("TRUNCATE TABLE matches;")
+    conn.commit()
+    conn.close()
+    return
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("TRUNCATE TABLE players;")
+    conn.commit()
+    conn.close()
+    return
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("select count(*) as number from players;")
+    (res, ) = cur.fetchone()
+    conn.close()
+    if res is None or res == '0':
+        res = 0
+    return res
 
 
 def registerPlayer(name):
@@ -32,6 +52,13 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO players ('name') VALUES (%s);", (name))
+    conn.commit()
+    conn.close()
+    return
+
 
 
 def playerStandings():
@@ -74,4 +101,4 @@ def swissPairings():
         name2: the second player's name
     """
 
-
+print countPlayers()
