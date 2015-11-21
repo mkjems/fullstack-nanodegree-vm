@@ -44,7 +44,7 @@ def AddPost(content):
       content: The text content of the new post.
     '''
     conn, cursor = GetConnection()
-    cursor.execute("INSERT INTO posts (content) VALUES ('{}')".format(content))
+    cursor.execute("INSERT INTO posts (content) VALUES (%s)", (content,))
     conn.commit()
     conn.close()
 
