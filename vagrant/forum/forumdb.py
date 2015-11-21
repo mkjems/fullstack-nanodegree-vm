@@ -29,14 +29,10 @@ def GetAllPosts():
     cursor.execute("SELECT * FROM posts order by time desc;")
     results = cursor.fetchall()
     conn.close()
-
-    db_posts = [{
+    db_posts = ({
         'content': str(row[0]),
-        'time': datetime.datetime.strptime(
-            str(row[1]), '%Y-%m-%d %H:%M:%S.%f').strftime(
-            '%d, %b %Y %H:%M:%S')
-    } for row in results]
-
+        'time': str(row[1])
+    } for row in results)
     return db_posts
 
 
