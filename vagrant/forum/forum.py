@@ -72,9 +72,9 @@ def Post(env, resp):
     if length > 0:
         postdata = input.read(length)
         fields = cgi.parse_qs(postdata)
-        content = fields['content'][0]
+        content = fields.get('content', [''])
         # If the post is just whitespace, don't save it.
-        content = content.strip()
+        content = content[0].strip()
         if content:
             # Save it in the database
             forumdb.AddPost(content)
