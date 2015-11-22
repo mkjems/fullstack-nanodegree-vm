@@ -7,6 +7,8 @@ import forumdb
 
 # Other modules used to run a web server.
 import cgi
+import bleach
+
 from wsgiref.simple_server import make_server
 from wsgiref import util
 
@@ -73,8 +75,16 @@ def Post(env, resp):
         postdata = input.read(length)
         fields = cgi.parse_qs(postdata)
         content = fields.get('content', [''])
-        # If the post is just whitespace, don't save it.
-        content = content[0].strip()
+        # Get rid of dict
+        content = content[0]
+
+        # get rid of whitespace
+        content = content.strip()
+
+        # Escape tags to prevent script injection
+        content = bleach.clean(content)
+
+        # only save if we have content
         if content:
             # Save it in the database
             forumdb.AddPost(content)
