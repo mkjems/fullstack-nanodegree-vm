@@ -1,0 +1,4 @@
+
+if a tounament has n players it takes log2 n rounds and n-1 matches to complete.
+
+example:
