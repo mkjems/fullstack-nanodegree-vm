@@ -3,6 +3,9 @@
 # Test cases for tournament.py
 
 from tournament import *
+import random
+import math
+import time
 
 
 def testDeleteMatches():
@@ -126,6 +129,59 @@ def testPairings():
     print "8. After one match, players with one win are paired."
 
 
+def play16PLayerTournament():
+    # reset
+    deleteMatches()
+    deletePlayers()
+
+    newPlayers = [
+        "Twilight Sparkle",
+        "Fluttershy",
+        "Applejack",
+        "Mister X",
+        "Pinkie Pie",
+        "Cotten Eye Joe",
+        "President Obama",
+        "Whinston Churchill",
+        "Lou Reed",
+        "Benjamin Franklin",
+        "Michal Jackson",
+        "Sylvester Stalone",
+        "Madonna",
+        "Richard Nixon",
+        "Steve Jobs",
+        "Bill Gates"
+    ]
+
+    print "Number of new players:", len(newPlayers)
+    # register players
+    for player in newPlayers:
+        registerPlayer(player)
+
+    # Calculate number of rounds
+    number_of_rounds = int(math.log(len(newPlayers), 2))
+
+    for round in range(1, number_of_rounds+1):
+
+        print "\nWe're in round %d" % (round)
+
+        # pair
+        pairings = swissPairings()
+
+        # register
+        for pair in pairings:
+            p = [pair[0], pair[2]]
+            random.shuffle(p)
+            reportMatch(p[0], p[1])
+        time.sleep(4)
+
+        # Standings
+        print '\nStandings after round', round, '\n'
+        standings = playerStandings()
+        for plr in standings:
+            print plr
+
+
 if __name__ == '__main__':
     testDeleteMatches()
     testDelete()
@@ -135,4 +191,5 @@ if __name__ == '__main__':
     testStandingsBeforeMatches()
     testReportMatches()
     testPairings()
+    play16PLayerTournament()
     print "Success!  All tests pass!"

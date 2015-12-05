@@ -20,6 +20,9 @@ CREATE TABLE matches (
 	game_id serial PRIMARY KEY,
 	winner integer,
 	loser integer,
-	dateCreated timestamp DEFAULT current_timestamp
+	dateCreated timestamp DEFAULT current_timestamp,
+	UNIQUE (winner, loser) -- enforce that
 );
+
+
 
