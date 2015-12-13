@@ -161,19 +161,22 @@ def play16PLayerTournament():
     # Calculate number of rounds
     number_of_rounds = int(math.log(len(newPlayers), 2))
 
+    print "This tounament will take {} rounds".format(number_of_rounds)
+
     for round in range(1, number_of_rounds+1):
 
         print "\nWe're in round %d" % (round)
 
-        # pair
+        # Pair
         pairings = swissPairings()
 
-        # register
+        # Register
         for pair in pairings:
             p = [pair[0], pair[2]]
+            # Find a random winner
             random.shuffle(p)
             reportMatch(p[0], p[1])
-        time.sleep(4)
+        time.sleep(0)
 
         # Standings
         print '\nStandings after round', round, '\n'
@@ -181,6 +184,18 @@ def play16PLayerTournament():
         for plr in standings:
             print plr
 
+        # Test that all the oponent histories do not contain duplicates
+        standings = playerStandings()
+        for player in standings:
+            history = oponentHistory(player[0])
+            if(len(history) != len(set(history))):
+                raise ValueError(
+                    "Each player should only play an oponent once.")
+            if(len(history) != round):
+                raise ValueError(
+                    "After round {} each player should have played {} oponents".format(round, round))
+
+        # raw_input('OK')
 
 if __name__ == '__main__':
     testDeleteMatches()

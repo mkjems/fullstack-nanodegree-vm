@@ -9,6 +9,8 @@
 -- CREATE DATABASE tournament;
 \c tournament;
 
+DROP VIEW IF EXISTS history, standings CASCADE;
+
 DROP TABLE IF EXISTS players, matches;
 
 CREATE TABLE players (
@@ -21,8 +23,101 @@ CREATE TABLE matches (
 	winner integer,
 	loser integer,
 	dateCreated timestamp DEFAULT current_timestamp,
-	UNIQUE (winner, loser) -- enforce that
+	UNIQUE (winner, loser) -- enforce that two playes only play each other once in a tournament
 );
+
+-- This is the standings view
+
+--        name        | id | losses | wins | matches
+-- -------------------+----+--------+------+---------
+-- Twilight Sparkle   |  1 |      0 |    1 |       1
+-- Mister X           |  4 |      0 |    1 |       1
+-- ...
+CREATE VIEW standings AS
+    select s3.name, s1.id, s1.losses , s2.wins , s1.losses + s2.wins as matches from
+
+    (select p.id, count(m.loser) as losses from players as p
+    left join matches as m on (p.id = m.loser) group by p.id order by p.id)
+    as s1
+
+    left join
+
+    (select p2.id, count(m2.winner) as wins from players as p2
+    left join matches as m2 on (p2.id = m2.winner) group by p2.id
+    order by p2.id)
+
+    as s2 on (s1.id = s2.id)
+
+    join (select id, name from players)
+    as s3 on (s1.id = s3.id)
+
+    order by s2.wins desc;
+
+
+-- This is the history view.
+-- It can be used to easily find previous oponents
+
+--  player | oponent |        datecreated
+-- --------+---------+----------------------------
+--      17 |      18 | 2015-12-08 21:33:13.89332
+--      17 |      21 | 2015-12-08 21:33:14.480578
+--      18 |      17 | 2015-12-08 21:33:13.89332
+--      18 |      29 | 2015-12-08 21:33:14.120394
+-- ...
+CREATE VIEW history AS
+	(select
+		distinct player, w.loser as oponent, w.datecreated as datecreated
+	from (
+		select winner as player from matches
+		union all
+		select loser as player from matches
+	) p
+
+	join matches w on (w.winner = player)
+	)
+
+	union all
+
+	(select
+		distinct player, l.winner as oponent , l.datecreated as datecreated
+	from (
+		select winner as player from matches
+		union all
+		select loser as player from matches
+	) p
+
+	join matches l on (l.loser = player)
+	)
+
+	order by player, datecreated;
+
+
+-- Finds oponents that have the same number of wins and matches
+-- that you have not played against before.
+CREATE VIEW posible_oponents AS
+	select
+		s.id, o.id as oponent_id
+	from standings s
+		join
+		standings o on (
+			s.wins = o.wins
+			and s.matches = o.matches
+			and o.id != s.id
+			and o.id not in (select oponent from history where player = s.id)
+		)
+	order by id
+	;
+
+
+CREATE VIEW posible_games AS
+	select
+		po.id, po.oponent_id, s.wins
+	from posible_oponents po
+	join standings s on (s.id = po.id)
+		order by wins
+	;
+
+
 
 
 

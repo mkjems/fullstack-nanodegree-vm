@@ -4,6 +4,9 @@
 #
 
 import psycopg2
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
 
 
 def connect():
@@ -78,24 +81,7 @@ def playerStandings():
     """
     conn, cur = connect()
     sql = '''
-    select s3.name, s1.id, s1.losses , s2.wins , s1.losses + s2.wins as matches from
-
-    (select p.id, count(m.loser) as losses from players as p
-    left join matches as m on (p.id = m.loser) group by p.id order by p.id)
-    as s1
-
-    left join
-
-    (select p2.id, count(m2.winner) as wins from players as p2
-    left join matches as m2 on (p2.id = m2.winner) group by p2.id
-    order by p2.id)
-
-    as s2 on (s1.id = s2.id)
-
-    join (select id, name from players)
-    as s3 on (s1.id = s3.id)
-
-    order by s2.wins desc;
+        select * from standings;
     '''
     cur.execute(sql)
     results = cur.fetchall()
@@ -111,6 +97,29 @@ def playerStandings():
     return standing
 
 
+def oponentHistory(id):
+    """ Returns the list of oponents ids a player as already played in this
+    tournament
+    Arg: player id
+    """
+    conn, cur = connect()
+    sql = '''
+        (select loser as oponents from matches where  winner={} )
+        union all
+        (select winner as oponents from matches where  loser={} )
+    '''
+    sql = sql.format(id, id)
+    cur.execute(sql)
+    rows = cur.fetchall()
+    conn.close()
+    result = [row[0] for row in rows]
+
+    # print '********************************'
+    # print '*id*', id
+    # print '*Oponent history*', result
+    return result
+
+
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
 
@@ -119,10 +128,85 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
     conn, cur = connect()
-    cur.execute("INSERT INTO matches (winner, loser) VALUES (%s, %s);",(winner, loser))
+    sql = '''
+        INSERT INTO matches (winner, loser)
+        VALUES (%s, %s);
+    '''
+    cur.execute(sql, (winner, loser))
     conn.commit()
     conn.close()
     # print 'Report new match', winner, loser
+
+
+def get_tounament_player_dict():
+    ''' Read the payer names and id'''
+    conn, cur = connect()
+    sql = '''
+        select * from players;
+    '''
+    cur.execute(sql)
+    rows = cur.fetchall()
+    conn.close()
+    result = {int(row[0]): str(row[1]) for row in rows}
+    return result
+
+
+def get_posible_games():
+    ''' Returns a datastucture where all the players are grouped by number of wins
+    and have a list of all their possible oponents for the next game.
+    '''
+    conn, cur = connect()
+    sql = '''
+        select * from posible_games;
+    '''
+    cur.execute(sql)
+    rows = cur.fetchall()
+    conn.close()
+    result = {}
+    for row in rows:
+        (id, oponent_id, wins) = row
+        result.setdefault(
+            int(wins), {}).setdefault(int(id), []).append(int(oponent_id))
+    return result
+
+
+class MatchMaker:
+    """A match maker class"""
+
+    players = {}
+
+    def __init__(self):
+        self.players = {}
+
+    def add_player(self, id, possible_oponents):
+        self.players[id] = set(possible_oponents)
+
+    def is_more(self):
+        return bool(len(self.players))
+
+    def make_match(self):
+        # find the player with the least options for an oponent
+        num_options = [(key, len(value)) for key, value in self.players.iteritems()]
+        sorted_lengths = sorted(num_options, key=lambda player: player[1])
+        shortest = sorted_lengths.pop(0)[0]
+
+        # In this players list of possible oponents, find the one with the
+        # least options for an oponent '''
+        oponents = self.players[shortest]
+        oponents_options_nums = [(k, len(self.players[k])) for k in oponents]
+        oponent = oponents_options_nums.pop(0)[0]
+
+        game = set((shortest, oponent))
+
+        # Remove shortest and oponent from players
+        self.players.pop(shortest, None)
+        self.players.pop(oponent, None)
+
+        # Remove shortest and oponent from all sets.
+        new_players = {key: (value - game) for key, value in self.players.iteritems()}
+        self.players = new_players
+
+        return (shortest, oponent)
 
 
 def swissPairings():
@@ -140,15 +224,26 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+
     next_round = []
-    standings = playerStandings()
+    posible_games = get_posible_games()
+    player_dict = get_tounament_player_dict()
 
-    while len(standings) > 0:
-        (id1, name1, win1, matches1) = standings.pop(0)
-        (id2, name2, win2, matches2) = standings.pop(0)
-        game = (id1, name1, id2, name2)
-        next_round.append(game)
+    # Iterate through the groups of players with same num wins
+    for group in posible_games:
+        # Create a matchmaker and feed it all the players for this group
+        match_maker = MatchMaker()
+        for player in posible_games[group]:
+            match_maker.add_player(player, posible_games[group][player])
 
-    # print next_round
+        # Keep making matches until there are no more players
+        while match_maker.is_more():
+            (player1_id, player2_id) = match_maker.make_match()
+            next_round.append((
+                player1_id,
+                player_dict[player1_id],
+                player2_id,
+                player_dict[player1_id]
+            ))
+
     return next_round
-
