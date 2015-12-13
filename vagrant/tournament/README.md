@@ -5,7 +5,7 @@ This is my submission to the Udacity Full Stack Developer course 'Tournament Res
 
 ## Requirements
 
-Virtualbox
+[Virtualbox](https://www.virtualbox.org/) and [Vagrant](http://vagrantup.com/)
 
 ## How to run the code
 
@@ -26,5 +26,4 @@ Once you are in
 
  - The tests pass!
  - The code will prevent rematches
-
 

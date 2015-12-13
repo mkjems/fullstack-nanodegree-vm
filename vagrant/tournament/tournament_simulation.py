@@ -75,8 +75,8 @@ def play16PLayerTournament():
                     "After round {} each player should have"
                     " played {} oponents".format(round, round))
 
-        # raw_input('OK')
+        raw_input('Round complete. Press enter to go to next round')
 
 if __name__ == '__main__':
     play16PLayerTournament()
-    print "Success! tournament complete"
+    print "Success! Simulation of tournament complete"

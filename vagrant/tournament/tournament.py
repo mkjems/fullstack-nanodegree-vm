@@ -30,7 +30,7 @@ def deleteMatches():
 def deletePlayers():
     """Remove all the player records from the database."""
     conn, cur = connect()
-    cur.execute("TRUNCATE TABLE players;")
+    cur.execute("TRUNCATE TABLE players CASCADE;")
     conn.commit()
     conn.close()
     return
@@ -121,6 +121,13 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+
+    # Prevent rematches
+    winner_loser_hist = oponentHistory(winner)
+    loser_winner_hist = oponentHistory(loser)
+    if((len(winner_loser_hist) > 0) or (len(loser_winner_hist) > 0)):
+        return
+
     conn, cur = connect()
     sql = '''
         INSERT INTO matches (winner, loser)

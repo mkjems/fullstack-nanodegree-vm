@@ -1,18 +1,12 @@
 -- Table definitions for the tournament project.
---
--- Put your SQL 'create table' statements in this file; also 'create view'
--- statements if you choose to use it.
---
--- You can write comments in this file by starting them with two dashes, like
--- these lines here.
-
 
 -- Connect to the tournament database
 \c tournament;
 
 -- Delete the tables and views if they exit
 DROP VIEW IF EXISTS history, standings CASCADE;
-DROP TABLE IF EXISTS players, matches;
+DROP TABLE IF EXISTS players CASCADE;
+DROP TABLE IF EXISTS matches CASCADE;
 
 -- There are 2 tables
 
@@ -23,12 +17,18 @@ CREATE TABLE players (
 
 CREATE TABLE matches (
 	game_id serial PRIMARY KEY,
-	winner integer,
-	loser integer,
-	dateCreated timestamp DEFAULT current_timestamp,
-	UNIQUE (winner, loser) -- enforce that two playes only play each other once in a tournament
+	winner integer references players(id),
+	loser integer references players(id),
+	dateCreated timestamp DEFAULT current_timestamp
 );
 
+
+-- 1 function
+
+CREATE FUNCTION clean_emp() RETURNS void AS '
+    DELETE FROM emp
+        WHERE salary < 0;
+' LANGUAGE SQL;
 
 -- And 4 views
 
