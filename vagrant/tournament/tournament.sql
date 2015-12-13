@@ -6,12 +6,15 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
--- CREATE DATABASE tournament;
+
+-- Connect to the tournament database
 \c tournament;
 
+-- Delete the tables and views if they exit
 DROP VIEW IF EXISTS history, standings CASCADE;
-
 DROP TABLE IF EXISTS players, matches;
+
+-- There are 2 tables
 
 CREATE TABLE players (
 	id serial PRIMARY KEY,
@@ -25,6 +28,9 @@ CREATE TABLE matches (
 	dateCreated timestamp DEFAULT current_timestamp,
 	UNIQUE (winner, loser) -- enforce that two playes only play each other once in a tournament
 );
+
+
+-- And 4 views
 
 -- This is the standings view
 
@@ -94,6 +100,13 @@ CREATE VIEW history AS
 
 -- Finds oponents that have the same number of wins and matches
 -- excludes rematches.
+
+-- id  | oponent_id
+-- -----+------------
+--  110 |        120
+--  110 |        122
+--  110 |        123
+--  111 |        113
 CREATE VIEW posible_oponents AS
 	select
 		s.id, o.id as oponent_id
@@ -108,7 +121,15 @@ CREATE VIEW posible_oponents AS
 	order by id
 	;
 
+-- This is used to find the pairing for the next round.
+-- It's just the posible_oponents view with an extra wins column
 
+-- id  | oponent_id | wins
+-- -----+------------+------
+--  123 |        120 |    1
+--  122 |        120 |    1
+--  110 |        123 |    1
+--  110 |        120 |    1
 CREATE VIEW posible_games AS
 	select
 		po.id, po.oponent_id, s.wins

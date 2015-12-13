@@ -5,13 +5,14 @@
 
 import psycopg2
 import pprint
+from MatchMaker import MatchMaker
 
 pp = pprint.PrettyPrinter(indent=4)
 
 
 def connect():
-    """Connect to the PostgreSQL database.  Returns a database connection and a cursor in
-    a tuple."""
+    """Connect to the PostgreSQL database.  Returns a database connection
+    and a cursor in a tuple."""
     connection = psycopg2.connect("dbname=tournament user=vagrant")
     cursor = connection.cursor()
     return (connection, cursor)
@@ -162,51 +163,6 @@ def get_posible_games():
     return result
 
 
-class MatchMaker:
-    """A match maker class
-    The main feature of this class is that it is able to
-    pick matches between a list of contenders while making sure
-    that we avoid pairing players that have played before.
-
-    It does so by
-    """
-
-    players = {}
-
-    def __init__(self):
-        self.players = {}
-
-    def add_player(self, id, possible_oponents):
-        self.players[id] = set(possible_oponents)
-
-    def is_more(self):
-        return bool(len(self.players))
-
-    def make_match(self):
-        # find the player with the least options for an oponent
-        num_options = [(key, len(value)) for key, value in self.players.iteritems()]
-        sorted_lengths = sorted(num_options, key=lambda player: player[1])
-        shortest = sorted_lengths.pop(0)[0]
-
-        # In this players list of possible oponents, find the one with the
-        # least options for an oponent
-        oponents = self.players[shortest]
-        oponents_options_nums = [(k, len(self.players[k])) for k in oponents]
-        oponent = oponents_options_nums.pop(0)[0]
-
-        game = set((shortest, oponent))
-
-        # Remove shortest and oponent from players
-        self.players.pop(shortest, None)
-        self.players.pop(oponent, None)
-
-        # Remove shortest and oponent from all sets.
-        new_players = {key: (value - game) for key, value in self.players.iteritems()}
-        self.players = new_players
-
-        return (shortest, oponent)
-
-
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
 
@@ -227,7 +183,7 @@ def swissPairings():
     posible_games = get_posible_games()
     player_dict = get_tounament_player_dict()
 
-    # Iterate through the groups of players with same num wins
+    # Iterate through the groups of players with same number of wins
     for group in posible_games:
         # Create a matchmaker and feed it all the players for this group
         match_maker = MatchMaker()
