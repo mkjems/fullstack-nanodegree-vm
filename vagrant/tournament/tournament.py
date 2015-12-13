@@ -10,7 +10,8 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 def connect():
-    """Connect to the PostgreSQL database.  Returns a database connection."""
+    """Connect to the PostgreSQL database.  Returns a database connection and a cursor in
+    a tuple."""
     connection = psycopg2.connect("dbname=tournament user=vagrant")
     cursor = connection.cursor()
     return (connection, cursor)
@@ -22,7 +23,6 @@ def deleteMatches():
     cur.execute("TRUNCATE TABLE matches;")
     conn.commit()
     conn.close()
-    # print '*DELETED ALL matches*'
     return
 
 
@@ -32,7 +32,6 @@ def deletePlayers():
     cur.execute("TRUNCATE TABLE players;")
     conn.commit()
     conn.close()
-    # print '*DELETED ALL players*'
     return
 
 
@@ -45,7 +44,6 @@ def countPlayers():
     if res is None or res == '0':
         res = 0
 
-    # print 'count players', res
     return res
 
 
@@ -62,7 +60,6 @@ def registerPlayer(name):
     cur.execute("INSERT INTO players (name) VALUES (%s);", (name,))
     conn.commit()
     conn.close()
-    # print '*Register player*', name
     return
 
 
@@ -93,7 +90,7 @@ def playerStandings():
         int(row[3]),  # wins
         int(row[4])   # matches
     ) for row in results]
-    # print '*Standing*', standing
+
     return standing
 
 
@@ -104,26 +101,22 @@ def oponentHistory(id):
     """
     conn, cur = connect()
     sql = '''
-        (select loser as oponents from matches where  winner={} )
+        (select loser as oponents from matches where  winner= %s )
         union all
-        (select winner as oponents from matches where  loser={} )
+        (select winner as oponents from matches where  loser= %s )
     '''
-    sql = sql.format(id, id)
-    cur.execute(sql)
+    cur.execute(sql, (id, id))
     rows = cur.fetchall()
     conn.close()
     result = [row[0] for row in rows]
 
-    # print '********************************'
-    # print '*id*', id
-    # print '*Oponent history*', result
     return result
 
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
 
-    Args:
+    Arguments:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
@@ -135,7 +128,6 @@ def reportMatch(winner, loser):
     cur.execute(sql, (winner, loser))
     conn.commit()
     conn.close()
-    # print 'Report new match', winner, loser
 
 
 def get_tounament_player_dict():
@@ -171,7 +163,13 @@ def get_posible_games():
 
 
 class MatchMaker:
-    """A match maker class"""
+    """A match maker class
+    The main feature of this class is that it is able to
+    pick matches between a list of contenders while making sure
+    that we avoid pairing players that have played before.
+
+    It does so by
+    """
 
     players = {}
 
@@ -191,7 +189,7 @@ class MatchMaker:
         shortest = sorted_lengths.pop(0)[0]
 
         # In this players list of possible oponents, find the one with the
-        # least options for an oponent '''
+        # least options for an oponent
         oponents = self.players[shortest]
         oponents_options_nums = [(k, len(self.players[k])) for k in oponents]
         oponent = oponents_options_nums.pop(0)[0]

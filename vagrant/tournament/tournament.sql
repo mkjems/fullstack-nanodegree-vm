@@ -93,7 +93,7 @@ CREATE VIEW history AS
 
 
 -- Finds oponents that have the same number of wins and matches
--- that you have not played against before.
+-- excludes rematches.
 CREATE VIEW posible_oponents AS
 	select
 		s.id, o.id as oponent_id

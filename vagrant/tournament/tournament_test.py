@@ -193,7 +193,8 @@ def play16PLayerTournament():
                     "Each player should only play an oponent once.")
             if(len(history) != round):
                 raise ValueError(
-                    "After round {} each player should have played {} oponents".format(round, round))
+                    "After round {} each player should have"
+                    " played {} oponents".format(round, round))
 
         # raw_input('OK')
 
