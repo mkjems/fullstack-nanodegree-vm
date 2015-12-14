@@ -142,7 +142,7 @@ def reportMatch(winner, loser):
 
     # Prevent rematches
     if(havePlayersMetBefore(winner, loser)):
-        print '**** BIG REMATCH ERROR ****', winner, loser
+        print '* Ignoring rematch!*', winner, loser
         return
 
     conn, cur = connect()

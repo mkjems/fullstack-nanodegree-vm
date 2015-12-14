@@ -16,8 +16,7 @@ test-basic.made: tournament_test.py
 	@python tournament_test.py
 	@touch test-basic.made
 
-simulation: db simulation.made
-simulation.made: tournament_simulation.py
+simulation: db
 	@python tournament_simulation.py
 
 clean:

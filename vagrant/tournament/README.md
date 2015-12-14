@@ -20,10 +20,14 @@ Once you are in
 
 	cd /vagrant/tournament
 	make test
+	make test-basic
 	make simulation
+	make clean
+	make clean-test
 
 ## Features
 
  - The tests pass!
  - The code will prevent rematches
+ - You can run a simulation of a 16 player tournament
 
