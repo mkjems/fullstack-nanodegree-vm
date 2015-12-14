@@ -114,6 +114,24 @@ def oponentHistory(id):
     return result
 
 
+def havePlayersMetBefore(player1, player2):
+    """Simply checks if two players have met before
+    This is the only way I could prevent rematches.
+    I tried to do it in the database but failed.
+    """
+
+    conn, cur = connect()
+    sql = '''
+        select * from history
+        where (player = %s and oponent = %s);
+    '''
+    cur.execute(sql, (player1, player2))
+    rows = cur.fetchall()
+    conn.close()
+    games = [int(row[0]) for row in rows]
+    return bool(len(games))
+
+
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
 
@@ -123,9 +141,8 @@ def reportMatch(winner, loser):
     """
 
     # Prevent rematches
-    winner_loser_hist = oponentHistory(winner)
-    loser_winner_hist = oponentHistory(loser)
-    if((len(winner_loser_hist) > 0) or (len(loser_winner_hist) > 0)):
+    if(havePlayersMetBefore(winner, loser)):
+        print '**** BIG REMATCH ERROR ****', winner, loser
         return
 
     conn, cur = connect()

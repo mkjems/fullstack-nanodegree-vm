@@ -22,14 +22,6 @@ CREATE TABLE matches (
 	dateCreated timestamp DEFAULT current_timestamp
 );
 
-
--- 1 function
-
-CREATE FUNCTION clean_emp() RETURNS void AS '
-    DELETE FROM emp
-        WHERE salary < 0;
-' LANGUAGE SQL;
-
 -- And 4 views
 
 -- This is the standings view
