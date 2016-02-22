@@ -52,13 +52,13 @@ a {
 /* Restaurants List*/
 
 .Restaurants {
-
+  margin-top: 20px;
 }
 
 .Restaurants-item {
   display: flex;
   justify-content: space-between;
-  padding: 5px;
+  padding: 5px 5px 5px 0px;
 }
 
 .Restaurants-itemName {
@@ -71,6 +71,15 @@ a {
 }
 
 /* RestaurantMenu */
+
+.Navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.List {
+  margin-top: 20px;
+}
 
 .NamePrice {
   display: flex;
