@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+
 class Restaurant(Base):
     __tablename__ = 'restaurant'
     name = Column(String(80), nullable=False)
@@ -23,6 +24,16 @@ class MenuItem(Base):
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
     restaurant = relationship(Restaurant)
 
+    @property
+    def serialize(self):
+        # Returns object data in easily serializable format
+        return {
+            'name': self.name,
+            'description': self.description,
+            'id': self.id,
+            'price': self.price,
+            'course': self.course,
+        }
 
 # ###### Insert at the end of file ########
 
