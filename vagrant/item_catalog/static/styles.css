@@ -49,6 +49,27 @@ a {
   text-align: center;
 }
 
+/* Restaurants List*/
+
+.Restaurants {
+
+}
+
+.Restaurants-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.Restaurants-itemName {
+    margin:0;
+}
+
+.Restaurants-itemLinks {
+  margin: 0;
+  padding: 0;
+}
+
 /* RestaurantMenu */
 
 .NamePrice {

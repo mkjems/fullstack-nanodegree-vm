@@ -13,6 +13,14 @@
                 <textarea name='description' rows="4" cols="50">{{item.description}}</textarea>
                 <p>Price:</p>
                 <input type='text' size='30' name='price' placeholder="{{item.price}}">
+
+                <p>Course:</p>
+                <select name="course" id="">
+                    <option value="Dessert">Dessert</option>
+                    <option value="Entree" >Entree</option>
+                    <option value="Beverage">Beverage</option>
+                    <option value="Appetizer">Appetizer</option>
+                </select><br><br>
                 <div>
                     <input type='submit' value='Update'> <a href="{{url_for('restaurantMenu', restaurant_id=restaurant_id)}}">
                         Cancel

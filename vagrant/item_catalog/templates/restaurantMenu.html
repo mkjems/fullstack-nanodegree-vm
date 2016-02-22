@@ -14,7 +14,8 @@
 				</ul>
 			{% endif %}
 		{% endwith %}
-		<a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}">New menu item</a>
+		<a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}">New menu item</a><br>
+		<a href="{{url_for('restaurantList')}}">Back to Restaurants</a>
 
 			{% for i in items %}
 			<div>

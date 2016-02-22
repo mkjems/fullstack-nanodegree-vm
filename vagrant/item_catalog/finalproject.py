@@ -12,14 +12,14 @@ session = DBSession()
 app = Flask(__name__)
 
 
-# API endpoint
+# API endpoint for single menu item of a restaurant
 @app.route('/restaurants/<int:restaurant_id>/item/<int:menuitem_id>/JSON')
 def restaurantMenuItemJSON(restaurant_id, menuitem_id):
     menuitem = session.query(MenuItem).filter_by(id=menuitem_id).one()
     return jsonify(MenuItems=menuitem.serialize)
 
 
-# API endpoint
+# API endpoint for a menu
 @app.route('/restaurants/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
@@ -27,31 +27,60 @@ def restaurantMenuJSON(restaurant_id):
     return jsonify(MenuItems=[i.serialize for i in menuitems])
 
 
+# API endpoint for all restaurants
+@app.route('/restaurants/JSON')
+def restaurantsJSON():
+    restaurants = session.query(Restaurant).order_by(Restaurant.name).all()
+    return jsonify(Restaurants=[r.serialize for r in restaurants])
+
+
 # Root of website - all Restaurants
 @app.route('/')
 @app.route('/restaurants/')
 def restaurantList():
     restaurants = session.query(Restaurant).order_by(Restaurant.name).all()
-    # render_template('restaurantList.html', restaurants=restaurants)
-    return 'List of all restaurants'
+    return render_template('restaurants.html', restaurants=restaurants)
 
 
 # Create a new restaurant
 @app.route('/restaurant/new', methods=['GET', 'POST'])
 def restaurantCreate():
-    return 'Create a new restaurant'
+    if request.method == 'POST':
+        restaurant = Restaurant(name=request.form['name'])
+        session.add(restaurant)
+        session.commit()
+        flash('New restaurant: {0} created!'.format(restaurant.name))
+        return redirect(url_for('restaurantList'))
+    else:
+        return render_template('newRestaurant.html')
 
 
 # Update Restaurant
 @app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
 def restaurantUpdate(restaurant_id):
-    return 'Edit a new restaurant'
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    if request.method == 'POST':
+        restaurant.name = request.form['name']
+        session.add(restaurant)
+        session.commit()
+        flash('Restaurant {0} Updated'.format(restaurant.name))
+        return redirect(url_for('restaurantList'))
+    else:
+        return render_template('editRestaurant.html', restaurant=restaurant)
 
 
 # Delete Restaurant
 @app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
 def restaurantDelete(restaurant_id):
-    return 'Delete restaurant'
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    if request.method == 'POST':
+        flashMessage = 'Restaurant: %s deleted!' % restaurant.name
+        session.delete(restaurant)
+        session.commit()
+        flash(flashMessage)
+        return redirect(url_for('restaurantList'))
+    else:
+        return render_template('deleteRestaurant.html', restaurant=restaurant)
 
 
 # Menu of a single restaurant
