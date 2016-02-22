@@ -27,8 +27,34 @@ def restaurantMenuJSON(restaurant_id):
     return jsonify(MenuItems=[i.serialize for i in menuitems])
 
 
-# Root of website
+# Root of website - all Restaurants
 @app.route('/')
+@app.route('/restaurants/')
+def restaurantList():
+    restaurants = session.query(Restaurant).order_by(Restaurant.name).all()
+    # render_template('restaurantList.html', restaurants=restaurants)
+    return 'List of all restaurants'
+
+
+# Create a new restaurant
+@app.route('/restaurant/new', methods=['GET', 'POST'])
+def restaurantCreate():
+    return 'Create a new restaurant'
+
+
+# Update Restaurant
+@app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+def restaurantUpdate(restaurant_id):
+    return 'Edit a new restaurant'
+
+
+# Delete Restaurant
+@app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
+def restaurantDelete(restaurant_id):
+    return 'Delete restaurant'
+
+
+# Menu of a single restaurant
 @app.route('/restaurants/<int:restaurant_id>/menu')
 def restaurantMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
