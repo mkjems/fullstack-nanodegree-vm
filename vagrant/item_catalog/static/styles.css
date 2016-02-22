@@ -1,0 +1,86 @@
+
+/* General */
+body {
+  background-image: url('img3.jpg');
+  background-color: #333333;
+  font-family: sans-serif;
+}
+
+h1, h2, h3, h4 {
+  color: #f5df7f;
+}
+
+h1, h2 {
+  font-family: 'Georgia', serif; margin: 0;
+}
+
+h1{
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+h2{
+  font-size: 1.2em;
+}
+
+p, dd, dt{
+  color: #CCCCCC;
+}
+
+a {
+  text-decoration: none;
+  color:#f9c856;
+  font-size: .75em;
+}
+
+.pane {
+  border: 2px solid;
+  border-radius: 25px;
+  padding: 30px;
+  width: 60vw;
+  max-width: 570px;
+  margin: auto;
+  border-color: #999999;
+  background-color: #333333;
+}
+
+.header{
+  text-align: center;
+}
+
+/* RestaurantMenu */
+
+.NamePrice {
+  display: flex;
+  justify-content: space-between;
+}
+.NamePrice-name, .NamePrice-price {
+  margin-bottom: 0px;
+}
+
+.description {
+  margin-top: 5px;
+}
+
+.flash {
+  background: #cee5F5;
+}
+
+/*  edit */
+.editdeletepane{}
+
+
+
+/* Media Queries */
+@media (max-width: 800px) {
+  .pane {
+    width: 70vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .pane {
+    width: 80vw;
+  }
+}
