@@ -1,3 +1,5 @@
+DATABASE_NAME = restaurantmenuwithusers.db
+
 run: db populate-db.made
 	python finalproject.py
 
@@ -7,11 +9,11 @@ populate-db.made: database_populate.py
 	python database_populate.py
 	touch populate-db.made
 
-db: restaurantmenu.db database_setup.py
+db: $(DATABASE_NAME) database_setup.py
 
-restaurantmenu.db: database_setup.py
+$(DATABASE_NAME): database_setup.py
 	python database_setup.py
 
 clean:
-	rm -f restaurantmenu.db
+	rm -f $(DATABASE_NAME)
 	rm -f populate-db.made

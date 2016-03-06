@@ -1,18 +1,38 @@
-<html>
-	<head>
-		<link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-	</head>
-	<body>
-		<div class="pane">
-			<h1> New Menu Item for {{restaurant.name}}</h1>
+{% extends "main.html" %}
+{% block content %}
+    <div class="pane">
+        <h1> New Menu Item for {{restaurant.name}}</h1>
 
-			<form action="{{url_for('newMenuItem', restaurant_id=restaurant.id )}}" method = 'POST'>
-				<p>Name:</p>
-				<input type='text' size='30' name='name'>
-				<p>Description:</p>
-				<textarea name='description'></textarea>
-				<input type='submit' value='Create'>
-			</form>
-		</div>
-	</body>
-</html>
+        <form action="{{url_for('newMenuItem', restaurant_id=restaurant.id )}}" method = 'POST'>
+
+            <fieldset class="form-group">
+                <label for="course">Course:</label>
+                <select class="form-control" name="course" id="course" style="width:auto;">
+                    {% for course_item in courses %}
+                        <option value="{{course_item}}">{{course_item}}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" type='text' size='30' name='name'>
+            </fieldset>
+
+            <fieldset class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" name='description' id='description'></textarea>
+            </fieldset>
+
+            <fieldset class="form-group">
+                <label for="price">Price:</label>
+                <input value="$" placeholder="$" style="width:auto;" type="text" class="form-control" id="name" type='text' size='10' maxlength="10" name='price'>
+            </fieldset>
+
+            <button type="submit" class="btn btn-default">Create Menu Item</button>
+
+            <a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id )}}" class="btn btn-default btn" role="button">Cancel</a>
+
+        </form>
+    </div>
+{% endblock %}

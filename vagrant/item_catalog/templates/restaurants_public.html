@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+{% block content %}
+	<div class="pane">
+		<h1 class="header">Restaurants</h1>
+		<div class="Restaurants">
+			{% for restaurant in restaurants %}
+			<div class="Restaurants-item">
+				<a class="Restaurants-itemPrimary" title="See menu" href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">
+					<div>
+						<h3 class="Restaurants-itemName">{{restaurant.name}}</h3>
+					</div>
+				</a>
+				<p class="Restaurants-itemLinks">
+					<a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}" class="btn btn-default btn-sm" role="button">Menu</a>
+				</p>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

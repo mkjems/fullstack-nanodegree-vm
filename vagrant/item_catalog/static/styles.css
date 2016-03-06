@@ -1,48 +1,70 @@
 
 /* General */
 body {
-  background-image: url('img3.jpg');
-  background-color: #333333;
+
+  background-color: rgb(245, 238, 223);
   font-family: sans-serif;
 }
 
 h1, h2, h3, h4 {
-  color: #f5df7f;
+  color: #222;
 }
 
-h1, h2 {
-  font-family: 'Georgia', serif; margin: 0;
+h1, h2 , h3{
+  margin: 0;
+  font-family: 'Poiret One';
 }
 
 h1{
-  padding-bottom: 20px;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+  font-weight: bold;
 }
 
 h2{
-  font-size: 1.2em;
+  font-size: 2.2em;
+  border: solid 1px #222;
+  border-right-width: 0px;
+  border-left-width: 0px;
+  text-transform: uppercase;
+  margin-top: 40px;
+  font-weight: bold;
 }
 
 p, dd, dt{
-  color: #CCCCCC;
+  color: #222;
 }
 
 a {
-  text-decoration: none;
-  color:#f9c856;
-  font-size: .75em;
+}
+
+.top-menu {
+  background-color: rgba(68, 68, 68, .17);
+  margin-bottom: 20px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-menu a:link, .top-menu a:visited{
+  color: #222;
+}
+.above-pane {
+  padding: 0px 30px;
+  max-width: 680px;
+  margin: auto;
+  margin-bottom: 20px;
 }
 
 .pane {
-  border: 2px solid;
-  border-radius: 25px;
+  border: 3px solid;
+  border-radius: 15px;
+  border-style: double;
   padding: 30px;
-  width: 60vw;
-  max-width: 570px;
+  max-width: 680px;
   margin: auto;
-  border-color: #999999;
-  background-color: #333333;
+  border-color: #222;
+  background-color: rgb(245, 238, 223);
+  margin-bottom: 40px;
 }
 
 .header{
@@ -72,9 +94,9 @@ a {
 
 /* RestaurantMenu */
 
-.Navigation {
-  display: flex;
-  justify-content: space-between;
+.navigation {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .List {
@@ -94,23 +116,18 @@ a {
 }
 
 .flash {
-  background: #cee5F5;
+  list-style-type: none;
 }
 
 /*  edit */
 .editdeletepane{}
 
-
-
-/* Media Queries */
-@media (max-width: 800px) {
-  .pane {
-    width: 70vw;
-  }
+.alert-adjust{
+  max-width: 680px;
+  border-style: double;
+  border-width: 3px;
+  margin: 0 auto 20px auto;
+  border-radius: 15px;
 }
 
-@media (max-width: 600px) {
-  .pane {
-    width: 80vw;
-  }
-}
+

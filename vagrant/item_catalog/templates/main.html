@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+	</head>
+	<body>
+		{% block header %}
+		<div class=" top-menu">
+			<a href="{{url_for('restaurantList')}}">
+				All Restaurants
+				<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			</a>
+			<a href="{{url_for('showLogin')}}">
+				Login
+			</a>
+		</div>
+		{% endblock %}
+		<div class="container">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

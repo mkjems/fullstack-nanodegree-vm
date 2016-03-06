@@ -1,37 +1,44 @@
-<html>
-	<head>
-		<link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-	</head>
-	<body>
-		<div class="pane">
-			<h1 class="header">Restaurants</h1>
-			{% with messages = get_flashed_messages() %}
-				{% if messages %}
-					<ul class="flash">
-						{% for message in messages %}
-					  		<li><strong>{{message}}</strong></li>
-						{% endfor %}
-					</ul>
-				{% endif %}
-			{% endwith %}
-			<a href="{{url_for('restaurantCreate')}}">New restaurat</a>
+{% extends "main.html" %}
 
-			<div class="Restaurants">
-				{% for restaurant in restaurants %}
-				<div class="Restaurants-item">
-					<a class="Restaurants-itemPrimary" title="See menu" href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">
-						<div>
-							<h3 class="Restaurants-itemName">{{restaurant.name}}</h3>
-						</div>
-					</a>
-					<p class="Restaurants-itemLinks">
-						<a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">Menu</a>
-						<a href="{{url_for('restaurantUpdate', restaurant_id=restaurant.id)}}">Edit</a>
-						<a href="{{url_for('restaurantDelete', restaurant_id=restaurant.id)}}">Delete</a>
-					</p>
-				</div>
-				{% endfor %}
-			</div>
-		</div>
-	</body>
-</html>
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block content %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-info alert-adjust" role="alert">
+                    {% for message in messages %}
+                        <strong>{{message}}</strong>
+                    {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="navigation">
+        <a href="{{url_for('restaurantCreate')}}" class="btn btn-default btn-sm" role="button">New Restaurant</a>
+    </div>
+
+    <div class="pane">
+        <h1 class="header">Restaurants</h1>
+        <div class="Restaurants">
+            {% for restaurant in restaurants %}
+            <div class="Restaurants-item">
+                <a class="Restaurants-itemPrimary" title="See menu" href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}">
+                    <div>
+                        <h3 class="Restaurants-itemName">{{restaurant.name}}</h3>
+                    </div>
+                </a>
+                <p class="Restaurants-itemLinks">
+                    <a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id)}}" class="btn btn-default btn-sm" role="button">Menu</a>
+                    {% if (restaurant.user_id) == (user_id) %}
+                        <a href="{{url_for('restaurantUpdate', restaurant_id=restaurant.id)}}" class="btn btn-default btn-sm" role="button">Edit</a>
+                        <a href="{{url_for('restaurantDelete', restaurant_id=restaurant.id)}}" class="btn btn-default btn-sm" role="button">Delete</a>
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

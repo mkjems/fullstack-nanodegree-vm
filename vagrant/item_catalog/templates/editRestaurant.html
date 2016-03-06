@@ -1,20 +1,23 @@
-<html>
-    <head>
-        <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-    </head>
-    <body>
-        <div class="pane">
-            <h1 class="header"> Edit restaurant <br> {{restaurant.name}}</h1>
+{% extends "main.html" %}
+{% block content %}
+    <div class="pane">
+        <h1 class="header"> Edit restaurant <br> {{restaurant.name}}</h1>
 
-            <form action="{{url_for('restaurantUpdate', restaurant_id=restaurant.id)}}" method = 'POST'>
-                <p>Name:</p>
-                <input type='text' size='30' name='name' placeholder="{{restaurant.name}}">
-                <div>
-                    <input type='submit' value='Update'> <a href="{{url_for('restaurantList')}}">
-                        Cancel
-                    </a>
-                </div>
-            </form>
-        </div>
-    </body>
-</html>
+        <form action="{{url_for('restaurantUpdate', restaurant_id=restaurant.id)}}" method = 'POST'>
+
+            <fieldset class="form-group">
+                <label for="course">Name:</label>
+                <input type='text' class="form-control" size='30' name='name' value="{{restaurant.name}}" placeholder="{{restaurant.name}}">
+            </fieldset>
+
+
+                <button type='submit' class="btn btn-info" >Update</button>
+
+                <a href="{{url_for('restaurantList')}}" class="btn btn-default btn" role="button">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
