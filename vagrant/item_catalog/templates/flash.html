@@ -1,0 +1,19 @@
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-info alert-adjust" role="alert">
+                {% for message in messages %}
+                    <strong>{{message}} </strong>
+                    <a href="" title="Dismiss">
+                        <span class="glyphicon glyphicon-remove-circle hider" aria-hidden="true"></span>
+                    </a>
+                    <script>
+                        var hider = document.querySelector('.hider');
+                        hider.onclick = function(e) {
+                            e.preventDefault();
+                            document.querySelector('.alert').remove();
+                        }
+                    </script>
+                {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}

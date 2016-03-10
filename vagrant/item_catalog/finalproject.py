@@ -96,13 +96,6 @@ def gconnect():
     answer = requests.get(userinfo_url, params=params)
     data = json.loads(answer.text)
 
-    print data
-    print '***********************************'
-    print data['name']
-    print data['picture']
-    print data['email']
-    print '***********************************'
-
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
@@ -113,13 +106,6 @@ def gconnect():
         user_id = createUser(login_session)
 
     login_session['user_id'] = user_id
-
-    print "*********** User logged in **************"
-    print 'User id:'
-    print login_session['user_id']
-    print login_session['email']
-    print "*****************************************"
-
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -129,7 +115,6 @@ def gconnect():
     output += ''' " style = "width: 300px; height: 300px;border-radius: 150px;
     -webkit-border-radius: 150px;-moz-border-radius: 150px;"> '''
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
     return output
 
 
@@ -143,24 +128,11 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    # print '\n Credentials'
-    # pprint (vars(credentials))
-    # print '\n'
-
-    print '\n Username'
-    # pprint (vars(credentials))
-    print login_session['username']
-
     # Revoke current token
     access_token = credentials.access_token
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
-    print '\n URL:'
-    print url + '\n'
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-
-    print 'results'
-    pprint(vars(result))
 
     if result['status'] == '200':
         # Reset users session
@@ -210,21 +182,18 @@ def restaurantsJSON():
 @app.route('/restaurants/')
 def restaurantList():
     restaurants = session.query(Restaurant).order_by(Restaurant.name).all()
-    for restaurant in restaurants:
-        print '************'
-        print restaurant.user_id
-        print login_session['user_id']
-        print '************'
     if 'username' not in login_session:
         return render_template(
             'restaurants_public.html',
             restaurants=restaurants
         )
     else:
+        current_user = getUserInfo(login_session['user_id'])
         return render_template(
             'restaurants.html',
             restaurants=restaurants,
-            user_id=login_session['user_id']
+            user_id=login_session['user_id'],
+            picture=current_user.picture
         )
 
 
@@ -298,6 +267,8 @@ def restaurantDelete(restaurant_id):
 @app.route('/restaurants/<int:restaurant_id>/menu')
 def restaurantMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    creator = getUserInfo(restaurant.user_id)
+
     appetizers = session.query(MenuItem).filter_by(restaurant_id=restaurant.id, course="Appetizers")
     main_dishes = session.query(MenuItem).filter_by(restaurant_id=restaurant.id, course="Main Dish")
     beverages = session.query(MenuItem).filter_by(restaurant_id=restaurant.id, course="Beverages").all()
@@ -313,6 +284,7 @@ def restaurantMenu(restaurant_id):
             desserts=desserts,
         )
     else:
+        isCreator = login_session['user_id'] == creator.id
         return render_template(
             'restaurantMenu.html',
             restaurant=restaurant,
@@ -320,6 +292,7 @@ def restaurantMenu(restaurant_id):
             main_dishes=main_dishes,
             beverages=beverages,
             desserts=desserts,
+            isCreator=isCreator
         )
 
 
@@ -331,7 +304,6 @@ def newMenuItem(restaurant_id):
     if ('username' not in login_session) or (creator.id != login_session['user_id']):
         return redirect(url_for('showLogin'))
     if request.method == 'POST':
-        pprint(request.form)
         newItem = MenuItem(
             course=request.form['course'],
             description=request.form['description'],
@@ -367,6 +339,8 @@ def editMenuItem(restaurant_id, menuitem_id):
             menuitem.description = request.form['description']
         if request.form['price']:
             menuitem.price = request.form['price']
+        if request.form['course']:
+            menuitem.course = request.form['course']
         session.add(menuitem)
         session.commit()
         flash('Menu Item {0} Updated'.format(menuitem.name))

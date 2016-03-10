@@ -40,14 +40,21 @@ a {
 .top-menu {
   background-color: rgba(68, 68, 68, .17);
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 0 10px;
   display: flex;
   justify-content: space-between;
+  line-height: 44px;
 }
 
 .top-menu a:link, .top-menu a:visited{
   color: #222;
 }
+
+.top-menu__user-picture {
+  width:30px;
+  border-radius: 50%;
+}
+
 .above-pane {
   padding: 0px 30px;
   max-width: 680px;
@@ -122,12 +129,25 @@ a {
 /*  edit */
 .editdeletepane{}
 
+/* Alert */
 .alert-adjust{
   max-width: 680px;
   border-style: double;
   border-width: 3px;
   margin: 0 auto 20px auto;
   border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.glyphicon {
+  line-height: auto;
+}
+
+/* Login */
+
+#result {
+  text-align: center;
 }
 
 

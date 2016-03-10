@@ -5,20 +5,37 @@
 	<title>Restaurant Menu Login</title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="https://apis.google.com/js/client:platform.js?onload=start"></script>
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
 </head>
 <body>
-	<div>
-		<span class="g-signin"
-			data-scope="openid email"
-			data-clientid="726777014918-adsv2lq1bc4qfnr380vv90566d1m5v4i.apps.googleusercontent.com"
-			data-redirecturi="postmessage"
-			data-accesstype="offline"
-			data-cookiepolicy="single_host_origin"
-			data-callback="signInCallback"
-			data-approvalprompt="force">
-		</span>
+
+	<div class="top-menu">
+		<a href="{{url_for('restaurantList')}}">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			<span>All Restaurants</span>
+		</a>
 	</div>
-	<div id="result"></div>
+	<div class="container">
+		<div class="pane">
+			<h1 class="header">Restaurant login</h1>
+			<p class="text-center">Please sign in with Google+</p>
+			<div style="text-align: center;">
+				<span class="g-signin"
+					data-scope="openid email"
+					data-clientid="726777014918-adsv2lq1bc4qfnr380vv90566d1m5v4i.apps.googleusercontent.com"
+					data-redirecturi="postmessage"
+					data-accesstype="offline"
+					data-cookiepolicy="single_host_origin"
+					data-callback="signInCallback"
+					data-approvalprompt="force">
+				</span>
+			</div>
+			<div id="result"></div>
+		</div>
+	</div>
 
 	<script>
 		function signInCallback(authResult) {

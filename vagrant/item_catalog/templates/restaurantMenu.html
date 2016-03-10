@@ -1,27 +1,15 @@
 {% extends "main.html" %}
+
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
 {% block content %}
 
-	{% with messages = get_flashed_messages() %}
-		{% if messages %}
-			{% for message in messages %}
-				<div class="alert alert-info" role="alert">
-		  			<strong>{{message}}</strong>
-		  		</div>
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
-
-	<div class="navigation">
-		<a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}" class="btn btn-default btn-sm" role="button">
-		  <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-		New menu item</a>
-	</div>
+	{% include "flash.html" %}
 
 	<div class="pane">
 		<h1 class="header">{{restaurant.name}}</h1>
-
-
-
 		{% macro show_item(item) -%}
 			<div>
 				<div class="NamePrice">
@@ -29,16 +17,21 @@
 					<h3 class="NamePrice-price"> {{item.price}} </h3>
 				</div>
 				<p class="description">{{item.description}}</p>
+				{% if isCreator %}
 				<p>
 					<a href="{{url_for('editMenuItem', restaurant_id=restaurant.id , menuitem_id=item.id )}}" class="btn btn-default btn-xs" role="button" >Edit</a>
 					<a href="{{url_for('deleteMenuItem', restaurant_id=restaurant.id , menuitem_id=item.id )}}" class="btn btn-default btn-xs" role="button" >Delete</a>
 				</p>
+				{% endif %}
 			</div>
 		{%- endmacro %}
 
 		{% macro show_no_items()%}
 			<p>
-				Unbelievable. No entries here so far. <a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}" >Why don't you create one?</a>
+				Unbelievable. No entries here so far.
+				{% if isCreator %}
+					<a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}" >Why don't you create one?</a>
+				{% endif %}
 			</p>
 		{%- endmacro %}
 
@@ -78,6 +71,12 @@
 			{% endfor %}
 		</div>
 
-
 	</div>
+	{% if isCreator %}
+	<div class="navigation">
+		<a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}" class="btn btn-default btn-sm" role="button">
+		  <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+		New menu item</a>
+	</div>
+	{% endif %}
 {% endblock %}
