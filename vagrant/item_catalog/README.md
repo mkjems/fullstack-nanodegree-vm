@@ -4,7 +4,7 @@
 This is my submission to the Udacity Full Stack Developer course 'Item Catalog' project.
 This is a restaurant menu website that allows users to log in using their Google+
 account via oAuth. Once authenticated, users can manage the menu cards
-of a small restaurtants they create.
+of restaurants they create.
 
 ## 1. Running the code from a Vagrant virtual machine
 This is a Python Flask project running of Sql Lite.
