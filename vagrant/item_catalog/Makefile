@@ -17,3 +17,6 @@ $(DATABASE_NAME): database_setup.py
 clean:
 	rm -f $(DATABASE_NAME)
 	rm -f populate-db.made
+
+show-database:
+	python database_showall.py

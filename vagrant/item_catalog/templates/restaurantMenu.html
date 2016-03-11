@@ -9,7 +9,10 @@
 	{% include "flash.html" %}
 
 	<div class="pane">
+
+		{% include "creatorRibbon.html" %}
 		<h1 class="header">{{restaurant.name}}</h1>
+
 		{% macro show_item(item) -%}
 			<div>
 				<div class="NamePrice">

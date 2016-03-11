@@ -56,7 +56,7 @@ session.commit()
 menuItem2 = MenuItem(
        user_id=1,
        name="Chicken Burger",
-       description="Juicy grilled chicken patty with tomato mayo and lettuce",
+       description="Juicy grilled chicken burger with tomato mayo and lettuce",
        price="$5.50",
        course="Main Dish", restaurant=restaurant1)
 

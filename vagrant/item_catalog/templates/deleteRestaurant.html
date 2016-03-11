@@ -5,7 +5,7 @@
 			Are you sure you want to delete {{restaurant.name}}?
 		</h1>
 		<form action="{{ url_for('restaurantDelete',restaurant_id = restaurant.id)}}" method = 'post'>
-			<button type="submit" class="btn btn-default">Delete</button>
+			<button type="submit" class="btn btn-info">Delete</button>
 
 			<a href="{{url_for('restaurantList')}}" class="btn btn-default btn" role="button">Cancel</a>
 		</form>

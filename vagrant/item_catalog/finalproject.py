@@ -282,6 +282,7 @@ def restaurantMenu(restaurant_id):
             main_dishes=main_dishes,
             beverages=beverages,
             desserts=desserts,
+            creatorPicture=creator.picture
         )
     else:
         isCreator = login_session['user_id'] == creator.id
@@ -292,7 +293,8 @@ def restaurantMenu(restaurant_id):
             main_dishes=main_dishes,
             beverages=beverages,
             desserts=desserts,
-            isCreator=isCreator
+            isCreator=isCreator,
+            creatorPicture=creator.picture
         )
 
 
