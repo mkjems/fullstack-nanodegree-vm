@@ -20,3 +20,13 @@ clean:
 
 show-database:
 	python database_showall.py
+
+run-locally: venv
+	venv/bin/python finalproject.py
+
+venv: venv/.made
+
+venv/.made: requirements.txt
+	virtualenv -p python2.7 venv
+	venv/bin/pip install -r requirements.txt
+	touch $@
