@@ -21,6 +21,9 @@ clean:
 show-database:
 	python database_showall.py
 
+show-database-sqlite3:
+	sqlite3 -batch -init database_commands.txt restaurantmenuwithusers.db
+
 run-locally: venv
 	venv/bin/python finalproject.py
 
