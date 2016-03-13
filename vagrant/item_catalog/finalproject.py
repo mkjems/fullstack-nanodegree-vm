@@ -183,7 +183,7 @@ def restaurantList():
     restaurants = session.query(Restaurant).order_by(Restaurant.name).all()
     if 'username' not in login_session:
         return render_template(
-            'restaurants_public.html',
+            'restaurants-public.html',
             restaurants=restaurants
         )
     else:
@@ -208,7 +208,7 @@ def restaurantCreate():
         flash('New restaurant: {0} created!'.format(restaurant.name))
         return redirect(url_for('restaurantList'))
     else:
-        return render_template('newRestaurant.html')
+        return render_template('new-restaurant.html')
 
 
 # Update a Restaurant
@@ -233,7 +233,7 @@ def restaurantUpdate(restaurant_id):
         flash('Restaurant {0} Updated'.format(restaurant.name))
         return redirect(url_for('restaurantList'))
     else:
-        return render_template('editRestaurant.html', restaurant=restaurant)
+        return render_template('edit-restaurant.html', restaurant=restaurant)
 
 
 # Delete a Restaurant
@@ -259,7 +259,7 @@ def restaurantDelete(restaurant_id):
         flash(flashMessage)
         return redirect(url_for('restaurantList'))
     else:
-        return render_template('deleteRestaurant.html', restaurant=restaurant)
+        return render_template('delete-restaurant.html', restaurant=restaurant)
 
 
 # Menu of a single restaurant (Public)
@@ -275,7 +275,7 @@ def restaurantMenu(restaurant_id):
 
     if 'username' not in login_session:
         return render_template(
-            'restaurantMenu_public.html',
+            'restaurant-menu-public.html',
             restaurant=restaurant,
             appetizers=appetizers,
             main_dishes=main_dishes,
@@ -286,7 +286,7 @@ def restaurantMenu(restaurant_id):
     else:
         isCreator = login_session['user_id'] == creator.id
         return render_template(
-            'restaurantMenu.html',
+            'restaurant-menu.html',
             restaurant=restaurant,
             appetizers=appetizers,
             main_dishes=main_dishes,
@@ -320,7 +320,7 @@ def newMenuItem(restaurant_id):
     else:
         restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
         return render_template(
-            'newMenuItem.html',
+            'new-menu-item.html',
             restaurant=restaurant,
             courses=constants.COURSES)
 
@@ -348,7 +348,7 @@ def editMenuItem(restaurant_id, menuitem_id):
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         return render_template(
-            'editMenuItem.html',
+            'edit-menu-item.html',
             restaurant_id=restaurant_id,
             menuitem_id=menuitem_id,
             item=menuitem,
@@ -371,7 +371,7 @@ def deleteMenuItem(restaurant_id, menuitem_id):
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         return render_template(
-            'deleteMenuitem.html',
+            'delete-menu-item.html',
             item=menuitem)
 
 
