@@ -1,28 +1,34 @@
-DATABASE_NAME = restaurantmenuwithusers.db
+WD=$(shell pwd)/
 
-run: db populate-db.made
+DATABASE_DIR=$(WD)item_catalog/db/
+DATABASE_NAME=/vagrant/item_catalog/item_catalog/db/restaurantmenuwithusers.db
+DATABASE_SETUP=$(WD)item_catalog/db/database_model.py
+DATABASE_POPULATE=$(WD)item_catalog/db/database_populate.py
+DATABASE_POPULATE_MADE=$(WD)item_catalog/db/populate-db.made
+
+run: db $(DATABASE_POPULATE_MADE)
 	python finalproject.py
 
-populate-db: db populate-db.made
+populate-db: db $(DATABASE_POPULATE_MADE)
 
-populate-db.made: database_populate.py
-	python database_populate.py
-	touch populate-db.made
+$(DATABASE_POPULATE_MADE): $(DATABASE_POPULATE)
+	cd $(DATABASE_DIR); python ./database_populate.py
+	touch $@
 
-db: $(DATABASE_NAME) database_setup.py
+db: $(DATABASE_NAME) $(DATABASE_SETUP)
 
-$(DATABASE_NAME): database_setup.py
-	python database_setup.py
+$(DATABASE_NAME): $(DATABASE_SETUP)
+	cd $(DATABASE_DIR); python ./database_initialize.py
 
 clean:
 	rm -f $(DATABASE_NAME)
-	rm -f populate-db.made
+	rm -f $(DATABASE_POPULATE_MADE)
 
 show-database:
-	python database_showall.py
+	python item_catalog/db/database_showall.py
 
 show-database-sqlite3:
-	sqlite3 -batch -init database_commands.txt restaurantmenuwithusers.db
+	sqlite3 -batch -init item_catalog/db/database_commands.txt $(DATABASE_NAME)
 
 run-locally: venv
 	venv/bin/python finalproject.py
