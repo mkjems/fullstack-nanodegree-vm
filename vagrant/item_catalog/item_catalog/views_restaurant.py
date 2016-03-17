@@ -9,6 +9,8 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from views_login import showLogin
 from db.user import getUserInfo
 
+from login_required_decorator import login_required
+
 
 # Root of website - all Restaurants Public
 @app.route('/')
@@ -34,9 +36,8 @@ def restaurantList():
 
 # Create a new Restaurant
 @app.route('/restaurant/new', methods=['GET', 'POST'])
+@login_required
 def restaurantCreate():
-    if 'username' not in login_session:
-        return redirect(url_for('showLogin'))
     if request.method == 'POST':
         restaurant = Restaurant(name=request.form['name'], user_id=login_session['user_id'])
         session.add(restaurant)
@@ -49,9 +50,8 @@ def restaurantCreate():
 
 # Update a Restaurant
 @app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+@login_required
 def restaurantUpdate(restaurant_id):
-    if 'username' not in login_session:
-        return redirect(url_for('showLogin'))
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurant.user_id)
     if (creator.id != login_session['user_id']):
@@ -74,9 +74,8 @@ def restaurantUpdate(restaurant_id):
 
 # Delete a Restaurant
 @app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
+@login_required
 def restaurantDelete(restaurant_id):
-    if 'username' not in login_session:
-        return redirect(url_for('showLogin'))
     restaurantToDelete = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurantToDelete.user_id)
     if (creator.id != login_session['user_id']):
