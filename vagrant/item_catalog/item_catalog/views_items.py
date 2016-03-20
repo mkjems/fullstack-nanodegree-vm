@@ -8,6 +8,7 @@ from db.database_model import Restaurant, MenuItem
 from db.user import getUserInfo
 
 import constants
+from login_required_decorator import login_required
 
 
 # Create menu item
@@ -40,10 +41,11 @@ def newMenuItem(restaurant_id):
 
 # Edit Menu Item
 @app.route('/restaurants/<int:restaurant_id>/item/<int:menuitem_id>/edit', methods=['GET', 'POST'])
+@login_required
 def editMenuItem(restaurant_id, menuitem_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurant.user_id)
-    if ('username' not in login_session) or (creator.id != login_session['user_id']):
+    if creator.id != login_session['user_id']:
         return redirect(url_for('showLogin'))
     menuitem = session.query(MenuItem).filter_by(id=menuitem_id).one()
     if request.method == 'POST':

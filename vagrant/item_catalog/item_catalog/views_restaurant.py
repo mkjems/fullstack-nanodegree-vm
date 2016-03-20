@@ -26,6 +26,8 @@ def restaurantList():
         )
     else:
         current_user = getUserInfo(login_session['user_id'])
+        if not current_user:
+            return redirect(url_for('showLogin'))
         return render_template(
             'restaurants.html',
             restaurants=restaurants,

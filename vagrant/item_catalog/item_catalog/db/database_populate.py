@@ -3,9 +3,7 @@ from database_model import Restaurant, Base, MenuItem, User
 
 # Delete all existing
 session.query(Restaurant).delete()
-session.commit()
 session.query(MenuItem).delete()
-session.commit()
 session.query(User).delete()
 session.commit()
 

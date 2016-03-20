@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 from database_model import Restaurant, Base, MenuItem, User
 
-engine = create_engine('sqlite:////vagrant/item_catalog/item_catalog/db/restaurantmenuwithusers.db')
+engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 # A DBSession() instance establishes all conversations with the database

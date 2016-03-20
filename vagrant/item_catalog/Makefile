@@ -1,10 +1,10 @@
-WD=$(shell pwd)/
 
-DATABASE_DIR=$(WD)item_catalog/db/
-DATABASE_NAME=/vagrant/item_catalog/item_catalog/db/restaurantmenuwithusers.db
-DATABASE_SETUP=$(WD)item_catalog/db/database_model.py
-DATABASE_POPULATE=$(WD)item_catalog/db/database_populate.py
+
+DATABASE_NAME=restaurantmenuwithusers.db
+DATABASE_MODEL=item_catalog/db/database_model.py
+DATABASE_POPULATE=item_catalog/db/database_populate.py
 DATABASE_POPULATE_MADE=$(WD)item_catalog/db/populate-db.made
+PYC=$(shell find . -name *.pyc )
 
 run: db $(DATABASE_POPULATE_MADE)
 	python finalproject.py
@@ -12,20 +12,21 @@ run: db $(DATABASE_POPULATE_MADE)
 populate-db: db $(DATABASE_POPULATE_MADE)
 
 $(DATABASE_POPULATE_MADE): $(DATABASE_POPULATE)
-	cd $(DATABASE_DIR); python ./database_populate.py
+	python -m item_catalog.db.database_populate
 	touch $@
 
-db: $(DATABASE_NAME) $(DATABASE_SETUP)
+db: $(DATABASE_NAME) $(DATABASE_MODEL)
 
-$(DATABASE_NAME): $(DATABASE_SETUP)
-	cd $(DATABASE_DIR); python ./database_initialize.py
+$(DATABASE_NAME): $(DATABASE_MODEL)
+	python -m item_catalog.db.database_initialize
 
 clean:
 	rm -f $(DATABASE_NAME)
 	rm -f $(DATABASE_POPULATE_MADE)
+	rm -f $(PYC)
 
 show-database:
-	python item_catalog/db/database_showall.py
+	python -m item_catalog.db.database_showall
 
 show-database-sqlite3:
 	sqlite3 -batch -init item_catalog/db/database_commands.txt $(DATABASE_NAME)

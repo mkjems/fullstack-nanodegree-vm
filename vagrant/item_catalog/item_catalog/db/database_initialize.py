@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
-from database_model import Base
+from item_catalog.db.database_model import Base
 
 if __name__ == '__main__':
-    engine = create_engine('sqlite:////vagrant/item_catalog/item_catalog/db/restaurantmenuwithusers.db')
+    engine = create_engine('sqlite:///restaurantmenuwithusers.db')
     Base.metadata.create_all(engine)
