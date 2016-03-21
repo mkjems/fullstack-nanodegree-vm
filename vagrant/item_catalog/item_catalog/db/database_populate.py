@@ -10,8 +10,8 @@ session.commit()
 # ############  Create new ones ############
 
 # Create dummy user
-User1 = User(name="Robo Barista", email="tinnyTim@udacity.com",
-             picture='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
+User1 = User(name="Diner Jack", email="jack@diner.com",
+             picture='http://localhost:5000/static/diner-owner.jpg')
 session.add(User1)
 session.commit()
 
@@ -38,6 +38,18 @@ menuItem2 = MenuItem(
        name="Chicken Burger",
        description="Juicy grilled chicken burger with tomato mayo and lettuce",
        price="$5.50",
+       image="Burger.jpg",
+       course="Main Dish", restaurant=restaurant1)
+
+session.add(menuItem2)
+session.commit()
+
+menuItem2 = MenuItem(
+       user_id=1,
+       name="Ice cream Sundae",
+       description="Classic ice cream dessert with chocolate souce",
+       price="$4.50",
+       image="Icecream.jpg",
        course="Main Dish", restaurant=restaurant1)
 
 session.add(menuItem2)

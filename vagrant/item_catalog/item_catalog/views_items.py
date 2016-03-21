@@ -1,14 +1,32 @@
-from item_catalog import app
+import os
+
+from werkzeug import secure_filename
+
+from login_required_decorator import login_required
 
 from flask import session as login_session
 from flask import render_template, request, redirect, url_for, flash
+from flask import send_from_directory
 
 from db import session
 from db.database_model import Restaurant, MenuItem
 from db.user import getUserInfo
 
 import constants
-from login_required_decorator import login_required
+
+from item_catalog import app
+from item_catalog import ALLOWED_EXTENSIONS
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+# Serve uploaded images
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 # Create menu item
@@ -19,13 +37,20 @@ def newMenuItem(restaurant_id):
     if ('username' not in login_session) or (creator.id != login_session['user_id']):
         return redirect(url_for('showLogin'))
     if request.method == 'POST':
+        # File upload
+        filename = ""
+        file = request.files['image']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         newItem = MenuItem(
             course=request.form['course'],
             description=request.form['description'],
             name=request.form['name'],
             price=request.form['price'],
             restaurant_id=restaurant_id,
-            user_id=login_session['user_id']
+            user_id=login_session['user_id'],
+            image=filename
         )
         session.add(newItem)
         session.commit()

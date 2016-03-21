@@ -16,12 +16,19 @@
 		<h1 class="header">{{restaurant.name}}</h1>
 
 		{% macro show_item(item) -%}
-			<div>
-				<div class="NamePrice">
-					<h3 class="NamePrice-name">{{item.name}}</h3>
-					<h3 class="NamePrice-price"> {{item.price}} </h3>
+			<div class="Item-imageInfo">
+				{% if item.image %}
+				<div class="Item-image">
+					<img src="http://localhost:5000/uploads/{{item.image}}" width="160" height="100">
 				</div>
-				<p class="description">{{item.description}}</p>
+				{% endif %}
+				<div class="Item-info">
+					<div class="Item-namePrice">
+						<h3 class="Item-namePrice-name">{{item.name}}</h3>
+						<h3 class="Item-namePrice-price"> {{item.price}} </h3>
+					</div>
+					<p class="Item--namePrice-description">{{item.description}}</p>
+				</div>
 			</div>
 		{%- endmacro %}
 

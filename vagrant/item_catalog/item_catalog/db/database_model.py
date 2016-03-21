@@ -39,6 +39,7 @@ class MenuItem(Base):
     restaurant = relationship(Restaurant)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+    image = Column(String(80))
 
     @property
     def serialize(self):

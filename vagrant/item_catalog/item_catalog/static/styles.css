@@ -103,17 +103,39 @@ a {
   margin-top: 20px;
 }
 
-.NamePrice {
+/* Menu Item */
+
+.Item-imageInfo {
   display: flex;
-  justify-content: space-between;
+  margin-bottom: 10px;
 }
-.NamePrice-name, .NamePrice-price {
+
+.Item-imageInfo:last-child {
   margin-bottom: 0px;
 }
 
-.description {
+.Item-image {
+  flex-grow: 0;
+  margin-right: 20px;
+}
+
+.Item-info {
+  flex-grow: 1;
+}
+
+.Item-namePrice {
+  display: flex;
+  justify-content: space-between;
+}
+.Item-namePrice-name, .Item-namePrice-price {
+  margin-bottom: 0px;
+}
+
+.Item-namePrice-description {
   margin-top: 5px;
 }
+
+/* */
 
 .flash {
   list-style-type: none;
