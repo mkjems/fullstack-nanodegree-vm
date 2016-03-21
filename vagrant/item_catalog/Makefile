@@ -11,28 +11,28 @@ UPLOADED_IMAGES=$(shell find \
 		| grep -v 'Icecream.jpg' | xargs)
 
 run: db $(DATABASE_POPULATE_MADE)
-	python finalproject.py
+	@python finalproject.py
 
 populate-db: db $(DATABASE_POPULATE_MADE)
 
 $(DATABASE_POPULATE_MADE): $(DATABASE_POPULATE)
-	python -m item_catalog.db.database_populate
-	touch $@
+	@python -m item_catalog.db.database_populate
+	@touch $@
 
 db: $(DATABASE_NAME) $(DATABASE_MODEL)
 
 $(DATABASE_NAME): $(DATABASE_MODEL)
-	python -m item_catalog.db.database_model
+	@python -m item_catalog.db.database_model
 
 clean:
-	rm -f $(DATABASE_NAME)
-	rm -f $(DATABASE_POPULATE_MADE)
-	rm -f $(PYC)
-	rm -f $(UPLOADED_IMAGES)
+	@rm -f $(DATABASE_NAME)
+	@rm -f $(DATABASE_POPULATE_MADE)
+	@rm -f $(PYC)
+	@rm -f $(UPLOADED_IMAGES)
 
 show-database:
-	python -m item_catalog.db.database_showall
+	@python -m item_catalog.db.database_showall
 
 show-database-sqlite3:
-	sqlite3 -batch -init item_catalog/db/database_commands.txt $(DATABASE_NAME)
+	@sqlite3 -batch -init item_catalog/db/database_commands.txt $(DATABASE_NAME)
 
