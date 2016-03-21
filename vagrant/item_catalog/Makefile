@@ -36,12 +36,3 @@ show-database:
 show-database-sqlite3:
 	sqlite3 -batch -init item_catalog/db/database_commands.txt $(DATABASE_NAME)
 
-run-locally: venv
-	venv/bin/python finalproject.py
-
-venv: venv/.made
-
-venv/.made: requirements.txt
-	virtualenv -p python2.7 venv
-	venv/bin/pip install -r requirements.txt
-	touch $@

@@ -1,4 +1,6 @@
 
+![Flask Project](http://flask.pocoo.org/static/badges/flask-project-s.png)
+
 #Item Catalog
 
 This is my submission to the Udacity Full Stack Developer course 'Item Catalog' project.
@@ -26,22 +28,11 @@ Once you are inside the virtual machine:
 `make run` will poppulate the database and start the webserver.
 You should then be able to view the Restaurant website on [http://localhost:5000](http://localhost:5000)
 
-## 2. Or, installation on you local machine using [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html)
 
-	git clone git@github.com:mkjems/fullstack-nanodegree-vm.git
-	cd fullstack-nanodegree-vm/vagrant/item_catalog
+## 2. Requirements
 
-if you do not have virtualenv you will need to install it like so:
+The project relies on [these requirements](requirements.txt).
 
-	pip install virtualenv
-
-otherwise from the `item_catalog` directory run this command:
-
-	make run-locally
-
-`make run-locally` will install Python 2.7 and [these requirements](requirements.txt) into a
-python virtual environment and run the webserver.
-You should then be able to view the Restaurant website on [http://localhost:5000](http://localhost:5000)
 
 ## 3. Usage
 
