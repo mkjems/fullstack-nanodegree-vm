@@ -1,5 +1,5 @@
 
-![Flask Project](http://flask.pocoo.org/static/badges/flask-project-s.png)
+[![Flask Project](http://flask.pocoo.org/static/badges/flask-project-s.png)](http://flask.pocoo.org)
 
 #Item Catalog
 
@@ -58,3 +58,8 @@ These are the url endpoints of the website:
 	restaurants/<restaurant_id>/item/new
 
 There are also two endpoints to get the menu data in json form.
+
+## 4. Features
+
+- Protection against CSRF attacks
+- Image upload for menu items
