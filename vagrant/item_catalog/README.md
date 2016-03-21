@@ -5,7 +5,7 @@
 
 This is my submission to the Udacity Full Stack Developer course 'Item Catalog' project.
 This is a restaurant menu website that allows users to log in using their Google+
-account via oAuth. Once authenticated, users can manage the menu cards
+account via oAuth. Once authenticated, users can manage menu cards
 of restaurants they create.
 
 ## 1. Running the code from a Vagrant virtual machine
@@ -36,7 +36,7 @@ The project relies on [these requirements](requirements.txt).
 
 ## 3. Usage
 
-The website has 8 different screens that hopefully are self explainatory.
+The website has 8 different screens, that hopefully are self explainatory.
 After you login using the login button on the top right.
 It is possible to create, edit and delete restaurants.
 It is also possible to create, edit and delete menu items for the restaurants you create.
