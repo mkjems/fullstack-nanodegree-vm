@@ -10,6 +10,7 @@ from views_login import showLogin
 from db.user import getUserInfo
 
 from login_required_decorator import login_required
+from csrf_decorator import csrf_protect
 
 
 # Root of website - all Restaurants Public
@@ -39,6 +40,7 @@ def restaurantList():
 # Create a new Restaurant
 @app.route('/restaurant/new', methods=['GET', 'POST'])
 @login_required
+@csrf_protect
 def restaurantCreate():
     if request.method == 'POST':
         restaurant = Restaurant(name=request.form['name'], user_id=login_session['user_id'])
@@ -53,6 +55,7 @@ def restaurantCreate():
 # Update a Restaurant
 @app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
 @login_required
+@csrf_protect
 def restaurantUpdate(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurant.user_id)
@@ -77,6 +80,7 @@ def restaurantUpdate(restaurant_id):
 # Delete a Restaurant
 @app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
 @login_required
+@csrf_protect
 def restaurantDelete(restaurant_id):
     restaurantToDelete = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurantToDelete.user_id)

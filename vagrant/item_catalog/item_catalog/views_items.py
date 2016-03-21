@@ -17,6 +17,8 @@ import constants
 from item_catalog import app
 from item_catalog import ALLOWED_EXTENSIONS
 
+from csrf_decorator import csrf_protect
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -31,6 +33,7 @@ def uploaded_file(filename):
 
 # Create menu item
 @app.route('/restaurants/<int:restaurant_id>/item/new', methods=['GET', 'POST'])
+@csrf_protect
 def newMenuItem(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurant.user_id)
@@ -67,6 +70,7 @@ def newMenuItem(restaurant_id):
 # Edit Menu Item
 @app.route('/restaurants/<int:restaurant_id>/item/<int:menuitem_id>/edit', methods=['GET', 'POST'])
 @login_required
+@csrf_protect
 def editMenuItem(restaurant_id, menuitem_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurant.user_id)
@@ -97,6 +101,7 @@ def editMenuItem(restaurant_id, menuitem_id):
 
 # Delete menu item
 @app.route('/restaurants/<int:restaurant_id>/item/<int:menuitem_id>/delete', methods=['GET', 'POST'])
+@csrf_protect
 def deleteMenuItem(restaurant_id, menuitem_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     creator = getUserInfo(restaurant.user_id)

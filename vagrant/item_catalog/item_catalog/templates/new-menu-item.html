@@ -38,6 +38,8 @@
                 <input value="$" placeholder="$" style="width:auto;" type="text" class="form-control" id="name" type='text' size='10' maxlength="10" name='price'>
             </fieldset>
 
+            <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+
             <button type="submit" class="btn btn-info">Create Menu Item</button>
 
             <a href="{{url_for('restaurantMenu', restaurant_id=restaurant.id )}}" class="btn btn-default btn" role="button">Cancel</a>

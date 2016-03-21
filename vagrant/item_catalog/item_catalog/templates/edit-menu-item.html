@@ -45,6 +45,8 @@
                     >
             </fieldset>
 
+            <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+
             <button type='submit' class="btn btn-info">Update</button>
 
              <a href="{{url_for('restaurantMenu', restaurant_id=restaurant_id)}}" class="btn btn-default btn" role="button">
