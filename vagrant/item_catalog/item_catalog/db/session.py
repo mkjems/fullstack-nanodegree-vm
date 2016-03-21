@@ -15,4 +15,3 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 
 session = DBSession()
-print 'session included'

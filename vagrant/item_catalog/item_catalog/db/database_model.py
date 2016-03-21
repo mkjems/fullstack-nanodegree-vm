@@ -1,3 +1,4 @@
+from sqlalchemy import create_engine
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -50,3 +51,8 @@ class MenuItem(Base):
             'price': self.price,
             'course': self.course,
         }
+
+
+if __name__ == '__main__':
+    engine = create_engine('sqlite:///restaurantmenuwithusers.db')
+    Base.metadata.create_all(engine)

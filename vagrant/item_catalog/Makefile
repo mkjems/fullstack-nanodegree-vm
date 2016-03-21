@@ -22,7 +22,7 @@ $(DATABASE_POPULATE_MADE): $(DATABASE_POPULATE)
 db: $(DATABASE_NAME) $(DATABASE_MODEL)
 
 $(DATABASE_NAME): $(DATABASE_MODEL)
-	python -m item_catalog.db.database_initialize
+	python -m item_catalog.db.database_model
 
 clean:
 	rm -f $(DATABASE_NAME)
